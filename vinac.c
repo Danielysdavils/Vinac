@@ -7,7 +7,7 @@
 
 #include "actions.h"
 
-typedef void (*vinac_action)();
+typedef int (*vinac_action)();
 typedef struct {
     const char *param;
     vinac_action action;
@@ -39,8 +39,7 @@ int main(int argc, char *argv[])
     {
         if(!strcmp(param, vinacActions[i].param))
         {
-            vinacActions[i].action(argc, argv);
-            return 0;
+            return vinacActions[i].action(argc, argv);
         }
     }
 

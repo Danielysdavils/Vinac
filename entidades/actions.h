@@ -18,37 +18,37 @@
     Insere um ou varios membros no archive sem compressão
     Caso o membro já exista no archive, ele é substituido.
 */
-void inserir_semCompressao(int argc, char *argv[]);
+int inserir_semCompressao(int argc, char *argv[]);
 
 /*
     Insere um ou varios membros no archive com compressão
     Caso o membro já exista ele é substituido.
 */
-void inserir_compressao(int argc, char *argv[]);
+int inserir_compressao(int argc, char *argv[]);
 
 /*
     Movimenta um membro indicado na linha de comando para
     imediatamente depois do membro target existente em archive.
     Caso target NUll, movimentação no inicio. 
 */
-void mover_membro(int argc, char *argv[]);
+int mover_membro(int argc, char *argv[]);
 
 /*
     Extrai os membros indicados no archive.
     Se nehum membro for especificado no parametro extrai todos os archivos.
 */
-void extrair(int argc, char *argv[]);
+int extrair(int argc, char *argv[]);
 
 /*
     Remove os membros indicados no archive.
     Se nenhum membro for especificado no parametro remove todos os membros do archive.
 */
-void remover(int argc, char *argv[]);
+int remover(int argc, char *argv[]);
 
 /*
     Lista o conteúdo do archive em ordem
 */
-void listar(int argc, char *argv[]);
+int listar(int argc, char *argv[]);
 
 
 #endif

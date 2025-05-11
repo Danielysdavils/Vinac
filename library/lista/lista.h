@@ -1,7 +1,7 @@
 #ifndef LISTA
 #define LISTA
 
-#include "entidades/membro.h"
+#include "membro.h"
 
 // estrutura de um item da lista
 struct item_t

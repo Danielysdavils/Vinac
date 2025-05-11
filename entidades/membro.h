@@ -13,8 +13,10 @@
 
 #include <time.h>
 
+#define Membro_NAME 100
+
 typedef struct{
-    char nome[100];
+    char nome[Membro_NAME];
     int uid;
     long tamanho_original;
     long tamanho_disco;
@@ -24,5 +26,8 @@ typedef struct{
     int ordem;
     
 } Membro;
+
+
+Membro create_membro(const char *path_membro);
 
 #endif
