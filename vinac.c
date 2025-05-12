@@ -4,10 +4,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include <stdbool.h>
 
 #include "actions.h"
 
-typedef int (*vinac_action)();
+typedef bool (*vinac_action)();
 typedef struct {
     const char *param;
     vinac_action action;
@@ -20,7 +21,7 @@ VinacAction vinacActions[] = {
     {"-ic", inserir_compressao},
     {"-i",  inserir_compressao},
     {"-m",  mover_membro},
-    {"-x",  extrair},
+    {"-x",  extrair_membros},
     {"-r",  remover},
     {"-c",  listar},
     {NULL,  NULL}

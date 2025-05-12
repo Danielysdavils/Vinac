@@ -86,6 +86,8 @@
    compression, while higher values gives better compression. The default
    value of 100000 is quite high. Experiment to see what works best for
    you. */
+
+#include <stdio.h>
 #define LZ_MAX_OFFSET 100000
 
 
@@ -486,55 +488,121 @@ int LZ_CompressFast( unsigned char *in, unsigned char *out,
 *  insize  - Number of input bytes.
 *************************************************************************/
 
-void LZ_Uncompress( unsigned char *in, unsigned char *out,
-    unsigned int insize )
+void LZ_Uncompress(unsigned char *in, unsigned char *out, unsigned int insize)
 {
     unsigned char marker, symbol;
-    unsigned int  i, inpos, outpos, length, offset;
+    unsigned int i, inpos, outpos, length, offset;
 
     /* Do we have anything to uncompress? */
-    if( insize < 1 )
+    if (insize < 1)
     {
         return;
     }
 
     /* Get marker symbol from input stream */
-    marker = in[ 0 ];
+    marker = in[0];
     inpos = 1;
 
     /* Main decompression loop */
     outpos = 0;
     do
     {
-        symbol = in[ inpos ++ ];
-        if( symbol == marker )
+        symbol = in[inpos++];
+        if (symbol == marker)
         {
             /* We had a marker byte */
-            if( in[ inpos ] == 0 )
+            if (in[inpos] == 0)
             {
                 /* It was a single occurrence of the marker byte */
-                out[ outpos ++ ] = marker;
-                ++ inpos;
+                out[outpos++] = marker;
+                ++inpos;
             }
             else
             {
                 /* Extract true length and offset */
-                inpos += _LZ_ReadVarSize( &length, &in[ inpos ] );
-                inpos += _LZ_ReadVarSize( &offset, &in[ inpos ] );
+                inpos += _LZ_ReadVarSize(&length, &in[inpos]);
+                inpos += _LZ_ReadVarSize(&offset, &in[inpos]);
+
+                /* Ensure that the offset is not too large (avoid segmentation fault) */
+                if (offset >= outpos)
+                {
+                    printf("Erro: offset maior que a posição atual no buffer de saída.\n");
+                    return;
+                }
 
                 /* Copy corresponding data from history window */
-                for( i = 0; i < length; ++ i )
+                for (i = 0; i < length; ++i)
                 {
-                    out[ outpos ] = out[ outpos - offset ];
-                    ++ outpos;
+                    /* Ensure we don't access memory outside the buffer */
+                    if (outpos < offset)
+                    {
+                        printf("Erro: tentativa de acessar memória fora do buffer de saída.\n");
+                        return;
+                    }
+
+                    out[outpos] = out[outpos - offset];
+                    ++outpos;
                 }
             }
         }
         else
         {
             /* No marker, plain copy */
-            out[ outpos ++ ] = symbol;
+            out[outpos++] = symbol;
         }
     }
-    while( inpos < insize );
+    while (inpos < insize);
 }
+
+// void LZ_Uncompress( unsigned char *in, unsigned char *out,
+//     unsigned int insize )
+// {
+//     unsigned char marker, symbol;
+//     unsigned int  i, inpos, outpos, length, offset;
+
+//     /* Do we have anything to uncompress? */
+//     if( insize < 1 )
+//     {
+//         return;
+//     }
+
+//     /* Get marker symbol from input stream */
+//     marker = in[ 0 ];
+//     inpos = 1;
+
+//     /* Main decompression loop */
+//     outpos = 0;
+//     do
+//     {
+//         symbol = in[ inpos ++ ];
+//         if( symbol == marker )
+//         {
+//             /* We had a marker byte */
+//             if( in[ inpos ] == 0 )
+//             {
+//                 /* It was a single occurrence of the marker byte */
+//                 out[ outpos ++ ] = marker;
+//                 ++ inpos;
+//             }
+//             else
+//             {
+//                 /* Extract true length and offset */
+//                 inpos += _LZ_ReadVarSize( &length, &in[ inpos ] );
+//                 inpos += _LZ_ReadVarSize( &offset, &in[ inpos ] );
+
+//                 /* Copy corresponding data from history window */
+//                 for( i = 0; i < length; ++ i )
+//                 {
+//                     out[ outpos ] = out[ outpos - offset ];
+//                     ++ outpos;
+//                 }
+//             }
+//         }
+//         else
+//         {
+//             /* No marker, plain copy */
+//             out[ outpos ++ ] = symbol;
+//         }
+//     }
+//     while( inpos < insize );
+// }

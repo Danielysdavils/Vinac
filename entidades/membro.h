@@ -11,23 +11,24 @@
 #ifndef _MEMBRO_H
 #define _MEMBRO_H
 
+#include <stdbool.h>
 #include <time.h>
 
 #define Membro_NAME 100
 
-typedef struct{
+struct membro
+{
     char nome[Membro_NAME];
     int uid;
     long tamanho_original;
     long tamanho_disco;
     time_t data_modificacao;
     long offset;
-    int comprimido;
+    bool comprimido;
     int ordem;
     
-} Membro;
+};
 
-
-Membro create_membro(const char *path_membro);
+struct membro *create_membro(const char *path_membro);
 
 #endif

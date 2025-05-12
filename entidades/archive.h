@@ -12,23 +12,30 @@
 #define _ARCHIVE_H
 
 #include <stdio.h>
+#include <stdbool.h>
+
 #include "membro.h"
 
 #define FILE_NAME 100
 
-typedef struct Archive{
-    Membro *membros;
+struct archive
+{
+    struct membro *membros;
     char nome[FILE_NAME];
     FILE *arquivo;
     int num_membros;
+};
 
-} Archive;
 
+struct archive *carregar_arquivo(const char *nome_arquivo);
 
-int abrir_archive(Archive *arq, const char *nome);
+struct archive *create_archive();
 
-void fechar_arquive(Archive *arq);
+bool abrir_archive(struct archive *arq, const char *nome);
 
-int salvar_directorio(Archive *arq);
+void fechar_arquive(struct archive *arq);
+
+bool salvar_directorio(struct archive *arq);
+
 
 #endif
