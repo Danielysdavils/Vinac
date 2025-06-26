@@ -1,7 +1,7 @@
 VINAC - Arquivador com suporte a compressão escrito na linguagem C
 
 Autora: Danielys Davila
-GRR: 20232351
+
 
 Arquivos:
     # unicamente cabeçalhos (structs) modulares
